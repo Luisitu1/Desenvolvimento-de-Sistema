@@ -3,12 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DAL
 {
     public class ClienteDAL
+
+
     {
         public void Inserir(Cliente _cliente)
         {
@@ -39,6 +42,10 @@ namespace DAL
                 cn.Close();
             }
         }
+
+
+
+
         public List<Cliente> BuscarTodos()
 
         {
@@ -85,6 +92,10 @@ namespace DAL
                 cn.Close();
             }
         }
+
+
+
+
         public List<Cliente> BuscarPorNome(string _nome)
         {
             SqlConnection cn = new SqlConnection();
@@ -123,13 +134,17 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new Exception("ocorreu um erro ao tentar buscar clientes por id no banco de dados", ex) { Data = { { "Id", 17 } } };
+                throw new Exception("ocorreu um erro ao tentar buscar clientes por nome no banco de dados", ex) { Data = { { "Id", 17 } } };
             }
             finally
             {
                 cn.Close();
             }
         }
+
+
+
+
         public Cliente BuscarPorId(int _id)
         {
             SqlConnection cn = new SqlConnection();
@@ -167,24 +182,120 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new Exception("", ex) { Data = { { "Id", 18 } } };
+                throw new Exception("ocorreu um erro ao tentar buscar clientes por id no banco de dados", ex) { Data = { { "Id", 18 } } };
             }
             finally
             {
                 cn.Close();
             }
         }
+
+
+
+
         public Cliente BuscarPorCPF(string _CPF)
         {
-            return null;
+            SqlConnection cn = new SqlConnection();
+            Cliente cliente = new Cliente();
+
+            try
+            {
+
+                SqlCommand cmd = new SqlCommand();
+
+
+                cmd.Connection = cn;
+                cmd.CommandText = @"SELECT Nome, CPF, RG, Email, Fone FROM Cliente WHERE CPF = @CPF";
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.Parameters.AddWithValue("@CPF", _CPF);
+
+
+                cn.Open();
+                using (SqlDataReader rd = cmd.ExecuteReader())
+                {
+                    while (rd.Read())
+                    {
+                        cliente.Id = (int)rd["Id"];
+                        cliente.Nome = rd["Nome"].ToString();
+                        cliente.CPF = rd["CPF"].ToString();
+                        cliente.RG = rd["RG"].ToString();
+                        cliente.Email = rd["Email"].ToString();
+                        cliente.Fone = rd["Fone"].ToString();
+
+                    }
+                }
+                return cliente;
+
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("ocorreu um erro ao tentar buscar clientes por CPF no banco de dados", ex) { Data = { { "Id", 19 } } };
+            }
+            finally
+            {
+                cn.Close();
+            }
         }
         public void Alterar(Cliente _cliente)
         {
+            SqlConnection cn = new SqlConnection(Conexao.StringDeConexao);
+            Cliente cliente = new Cliente();
+            try
+            {
+                SqlCommand cmd = cn.CreateCommand();
+                cmd.CommandText = @"UPDATE Cliente SET Nome = @Nome, 
+                                                       CPF = @CPF, 
+                                                       RG = @RG,
+                                                       Email = @Email,
+                                                       Fone = @Fone
+                                                       WHERE Id = @Id";
+                cmd.CommandType = System.Data.CommandType.Text;
+                cliente.Id = (int)rd["Id"];
+                cliente.Nome = rd["Nome"].ToString();
+                cliente.CPF = rd["CPF"].ToString();
+                cliente.RG = rd["RG"].ToString();
+                cliente.Email = rd["Email"].ToString();
+                cliente.Fone = rd["Fone"].ToString();
 
+                cmd.Connection = cn;
+                cn.Open();
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("erro ao tentar alterar cliente no banco de dados", ex) { Data = { { "Id", 20 } } };
+            }
+            finally
+            {
+                cn.Close();
+            }
         }
         public void Excluir(int _id)
         {
+            SqlConnection cn = new SqlConnection(Conexao.StringDeConexao);
+            try
+            {
+                SqlCommand cmd = cn.CreateCommand();
+                cmd.CommandText = @"DELETE FROM Cliente WHERE id = @id";
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.Parameters.AddWithValue("@Id", _id);
 
+
+                cmd.Connection = cn;
+                cn.Open();
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("erro ao tentar alterar cliente no banco de dados", ex) { Data = { { "Id", 20 } } };
+            }
+            finally
+            {
+                cn.Close();
+            }
         }
 
     }
