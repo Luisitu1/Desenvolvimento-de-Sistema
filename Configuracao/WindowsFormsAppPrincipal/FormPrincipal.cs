@@ -39,11 +39,13 @@ namespace WindowsFormsAppPrincipal
                 MessageBox.Show(ex.Message);
             }
         }
-        private void gruposDeUsuáriosToolStripMenuItem_Click(object sender, EventArgs e)
+        private void gruposDeUsuáriosToolStripMenuItem_Click(object
+        sender, EventArgs e)
         {
             try
             {
-                using (FormBuscarGrupoUsuario frm = new FormBuscarGrupoUsuario())
+                using (FormBuscarGrupoUsuario frm = new
+                FormBuscarGrupoUsuario())
                 {
                     frm.ShowDialog();
                 }
@@ -59,9 +61,18 @@ namespace WindowsFormsAppPrincipal
                 Close();
         }
 
-        private void toolStripComboBox1_Click(object sender, EventArgs e)
+
+        private void cadastroToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void clienteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (FormConsultaCliente frm = new FormConsultaCliente())
+            {
+                frm.ShowDialog();
+            }
         }
     }
 }

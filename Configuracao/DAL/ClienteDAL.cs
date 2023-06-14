@@ -19,7 +19,7 @@ namespace DAL
             try
             {
                 SqlCommand cmd = cn.CreateCommand();
-                cmd.CommandText = @"INSERT INTO Ciente(Nome, CPF, RG, Email, Fone) VALUES(@Nome, @CPF, @RG, @Email, @Fone)";
+                cmd.CommandText = @"INSERT INTO Cliente(Nome, CPF, RG, Email, Fone) VALUES(@Nome, @CPF, @RG, @Email, @Fone)";
                 cmd.CommandType = System.Data.CommandType.Text;
 
                 cmd.Parameters.AddWithValue("@Nome", _cliente.Nome);
@@ -98,7 +98,7 @@ namespace DAL
 
         public List<Cliente> BuscarPorNome(string _nome)
         {
-            SqlConnection cn = new SqlConnection();
+            SqlConnection cn = new SqlConnection(Conexao.StringDeConexao);
             Cliente cliente = new Cliente();
             List<Cliente> clienteList = new List<Cliente>();
             try
@@ -108,7 +108,7 @@ namespace DAL
                
 
                 cmd.Connection = cn;
-                cmd.CommandText = @"SELECT Nome, CPF, RG, Email, Fone FROM Cliente WHERE Nome Like @Nome";
+                cmd.CommandText = @"SELECT Id, Nome, CPF, RG, Email, Fone FROM Cliente WHERE Nome Like @Nome";
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.Parameters.AddWithValue("@Nome", "%" + _nome + "%");
 
@@ -118,6 +118,7 @@ namespace DAL
                 {
                     while (rd.Read())
                     {
+                        cliente = new Cliente();
                         cliente.Id = (int)rd["Id"];
                         cliente.Nome = rd["Nome"].ToString();
                         cliente.CPF = rd["CPF"].ToString();
@@ -251,12 +252,13 @@ namespace DAL
                                                        Fone = @Fone
                                                        WHERE Id = @Id";
                 cmd.CommandType = System.Data.CommandType.Text;
-                cliente.Id = (int)rd["Id"];
-                cliente.Nome = rd["Nome"].ToString();
-                cliente.CPF = rd["CPF"].ToString();
-                cliente.RG = rd["RG"].ToString();
-                cliente.Email = rd["Email"].ToString();
-                cliente.Fone = rd["Fone"].ToString();
+
+                cmd.Parameters.AddWithValue("@Id", _cliente.Id);
+                cmd.Parameters.AddWithValue("@Nome", _cliente.Nome);
+                cmd.Parameters.AddWithValue("@CPF", _cliente.CPF);
+                cmd.Parameters.AddWithValue("@RG", _cliente.RG);
+                cmd.Parameters.AddWithValue("@Email", _cliente.Email);
+                cmd.Parameters.AddWithValue("@Fone", _cliente.Fone);
 
                 cmd.Connection = cn;
                 cn.Open();
