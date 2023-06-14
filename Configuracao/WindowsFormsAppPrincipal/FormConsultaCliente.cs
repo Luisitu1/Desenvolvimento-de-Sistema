@@ -32,7 +32,23 @@ namespace WindowsFormsAppPrincipal
         {
             try
             {
-                clienteBindingSource.DataSource = new ClienteBLL().BuscarPorNome(textBox1.Text);
+                switch(comboBoxBuscarPor)
+                {
+                    case 0:
+                        clienteBindingSource.DataSource = new ClienteBLL().BuscarPorId(Convert.ToInt32(textBoxBuscar.Text));
+                        break;
+                    case 1:
+                        clienteBindingSource.DataSource = new ClienteBLL().BuscarPorNome(textBoxBuscar.Text);
+                        break;
+                    case 2:
+                        clienteBindingSource.DataSource = new ClienteBLL().BuscarPorCPF(textBoxBuscar.Text);
+                        break;
+                    case 3:
+                        clienteBindingSource.DataSource = new ClienteBLL().BuscarTodos();
+                    default:
+                        break;
+                }
+                
             }
             catch (Exception ex)
             {
@@ -51,7 +67,7 @@ namespace WindowsFormsAppPrincipal
                     return;
                 }
                 new
-ClienteBLL().Excluir(((Cliente)clienteBindingSource.Current).Id);
+                ClienteBLL().Excluir(((Cliente)clienteBindingSource.Current).Id);
                 clienteBindingSource.RemoveCurrent();
             }
             catch (Exception ex)
