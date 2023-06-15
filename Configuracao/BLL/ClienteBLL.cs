@@ -6,6 +6,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Remoting.Messaging;
 
 namespace BLL
 {
@@ -31,7 +32,10 @@ namespace BLL
         }
         public Cliente BuscarPorCPF(string _CPF)
         {
-            return new ClienteDAL().BuscarPorCPF(_CPF);
+            if (String.IsNullOrEmpty(_CPF))
+                throw new Exception("Informe um CPF") { Data = { { "Id", 32 } } };
+
+        return new ClienteDAL().BuscarPorCPF(_CPF);
         }
         public void Alterar(Cliente _cliente)
         {

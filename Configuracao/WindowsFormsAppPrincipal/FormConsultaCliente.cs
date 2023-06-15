@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Linq.Expressions;
+using System.Data.SqlClient;
 
 namespace WindowsFormsAppPrincipal
 {
@@ -32,9 +33,12 @@ namespace WindowsFormsAppPrincipal
         {
             try
             {
-                switch(comboBoxBuscarPor)
+                switch(comboBoxBuscarPor.SelectedIndex)
                 {
                     case 0:
+                        if (String.IsNullOrEmpty(textBoxBuscar.Text))
+                            throw new Exception("Informe um Id para fazer a busca.") { Data = { { "Id", 31 } } };
+
                         clienteBindingSource.DataSource = new ClienteBLL().BuscarPorId(Convert.ToInt32(textBoxBuscar.Text));
                         break;
                     case 1:
@@ -45,6 +49,7 @@ namespace WindowsFormsAppPrincipal
                         break;
                     case 3:
                         clienteBindingSource.DataSource = new ClienteBLL().BuscarTodos();
+                        break;
                     default:
                         break;
                 }
@@ -116,6 +121,29 @@ namespace WindowsFormsAppPrincipal
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void buttonExcluirCliente_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                if (clienteBindingSource.Count <= 0)
+                {
+                    MessageBox.Show("Não existe registro para ser excluído");
+                    return;
+                }
+                if (MessageBox.Show("Deseja realmente excluir este registro?", "Atenção", MessageBoxButtons.YesNo) == DialogResult.No)
+                    return;
+
+                int id = ((Cliente)clienteBindingSource.Current).Id;
+
+                new ClienteBLL().Excluir(id);
+                clienteBindingSource.RemoveCurrent();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

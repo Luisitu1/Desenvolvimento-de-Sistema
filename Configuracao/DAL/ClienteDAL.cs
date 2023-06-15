@@ -49,7 +49,7 @@ namespace DAL
         public List<Cliente> BuscarTodos()
 
         {
-            SqlConnection cn = new SqlConnection();
+            SqlConnection cn = new SqlConnection(Conexao.StringDeConexao);
             Cliente cliente = new Cliente();
 
             try
@@ -60,7 +60,7 @@ namespace DAL
 
                 List<Cliente> clienteList = new List<Cliente>();
                 cmd.Connection = cn;
-                cmd.CommandText = @"SELECT Nome, CPF, RG, Email, Fone FROM Cliente";
+                cmd.CommandText = @"SELECT Id, Nome, CPF, RG, Email, Fone FROM Cliente";
                 cmd.CommandType = System.Data.CommandType.Text;
 
 
@@ -69,6 +69,7 @@ namespace DAL
                 {
                     while (rd.Read())
                     {
+                        cliente = new Cliente();
                         cliente.Id = (int)rd["Id"];
                         cliente.Nome = rd["Nome"].ToString();
                         cliente.CPF = rd["CPF"].ToString();
@@ -148,7 +149,7 @@ namespace DAL
 
         public Cliente BuscarPorId(int _id)
         {
-            SqlConnection cn = new SqlConnection();
+            SqlConnection cn = new SqlConnection(Conexao.StringDeConexao);
             Cliente cliente = new Cliente();
             
             try
@@ -156,9 +157,9 @@ namespace DAL
 
                 SqlCommand cmd = new SqlCommand();
 
-
+              
                 cmd.Connection = cn;
-                cmd.CommandText = @"SELECT Nome, CPF, RG, Email, Fone FROM Cliente WHERE Id = @Id";
+                cmd.CommandText = @"SELECT Id, Nome, CPF, RG, Email, Fone FROM Cliente WHERE Id = @Id";
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.Parameters.AddWithValue("@Id", _id);
 
@@ -166,8 +167,9 @@ namespace DAL
                 cn.Open();
                 using (SqlDataReader rd = cmd.ExecuteReader())
                 {
-                    while (rd.Read())
+                    if(rd.Read())
                     {
+                        cliente = new Cliente();
                         cliente.Id = (int)rd["Id"];
                         cliente.Nome = rd["Nome"].ToString();
                         cliente.CPF = rd["CPF"].ToString();
@@ -196,7 +198,7 @@ namespace DAL
 
         public Cliente BuscarPorCPF(string _CPF)
         {
-            SqlConnection cn = new SqlConnection();
+            SqlConnection cn = new SqlConnection(Conexao.StringDeConexao);
             Cliente cliente = new Cliente();
 
             try
@@ -206,7 +208,7 @@ namespace DAL
 
 
                 cmd.Connection = cn;
-                cmd.CommandText = @"SELECT Nome, CPF, RG, Email, Fone FROM Cliente WHERE CPF = @CPF";
+                cmd.CommandText = @"SELECT Id, Nome, CPF, RG, Email, Fone FROM Cliente WHERE CPF = @CPF";
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.Parameters.AddWithValue("@CPF", _CPF);
 
@@ -214,8 +216,9 @@ namespace DAL
                 cn.Open();
                 using (SqlDataReader rd = cmd.ExecuteReader())
                 {
-                    while (rd.Read())
+                    if (rd.Read())
                     {
+
                         cliente.Id = (int)rd["Id"];
                         cliente.Nome = rd["Nome"].ToString();
                         cliente.CPF = rd["CPF"].ToString();
@@ -282,8 +285,8 @@ namespace DAL
                 SqlCommand cmd = cn.CreateCommand();
                 cmd.CommandText = @"DELETE FROM Cliente WHERE id = @id";
                 cmd.CommandType = System.Data.CommandType.Text;
-                cmd.Parameters.AddWithValue("@Id", _id);
 
+                cmd.Parameters.AddWithValue("@Id", _id);
 
                 cmd.Connection = cn;
                 cn.Open();
@@ -292,7 +295,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new Exception("erro ao tentar alterar cliente no banco de dados", ex) { Data = { { "Id", 20 } } };
+                throw new Exception("Ocorreu um erro ao tentar excluir cliente no banco de dados", ex) { Data = { { "Id", 21 } } };
             }
             finally
             {
