@@ -241,6 +241,9 @@ namespace DAL
                 cn.Close();
             }
         }
+
+
+
         public void Alterar(Cliente _cliente)
         {
             SqlConnection cn = new SqlConnection(Conexao.StringDeConexao);
@@ -277,6 +280,9 @@ namespace DAL
                 cn.Close();
             }
         }
+
+
+
         public void Excluir(int _id)
         {
             SqlConnection cn = new SqlConnection(Conexao.StringDeConexao);
