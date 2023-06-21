@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Linq.Expressions;
 using System.Data.SqlClient;
+using Microsoft.Win32;
 
 namespace WindowsFormsAppPrincipal
 {
@@ -21,6 +22,8 @@ namespace WindowsFormsAppPrincipal
             InitializeComponent();
         }
 
+
+
         private void buttonAdicionarCliente_Click(object sender, EventArgs e)
         {
             using (FormCadastroCliente frm = new FormCadastroCliente())
@@ -28,6 +31,8 @@ namespace WindowsFormsAppPrincipal
                 frm.ShowDialog();
             }
         }
+
+
 
         private void buttonBuscarCliente_Click(object sender, EventArgs e)
         {
@@ -62,6 +67,8 @@ namespace WindowsFormsAppPrincipal
 
         }
 
+
+
         private void buttonExcluirCliente_Click(object sender, EventArgs e)
         {
             try
@@ -81,10 +88,14 @@ namespace WindowsFormsAppPrincipal
             }
         }
 
+
+
         private void FormConsultaCliente_Load(object sender, EventArgs e)
         {
             comboBoxBuscarPor.SelectedIndex = 3;
         }
+
+
 
         private void buttonAdicionarCliente_Click_1(object sender, EventArgs e)
         {
@@ -93,6 +104,8 @@ namespace WindowsFormsAppPrincipal
                 frm.ShowDialog();
             }
         }
+
+
 
         private void buttonAlterarCliente_Click(object sender, EventArgs e)
         {
@@ -118,10 +131,14 @@ namespace WindowsFormsAppPrincipal
             }
         }
 
+
+
         private void label1_Click(object sender, EventArgs e)
         {
 
         }
+
+
 
         private void buttonExcluirCliente_Click_1(object sender, EventArgs e)
         {
@@ -145,5 +162,7 @@ namespace WindowsFormsAppPrincipal
                 MessageBox.Show(ex.Message);
             }
         }
+
+      
     }
 }
